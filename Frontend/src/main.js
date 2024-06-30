@@ -5,12 +5,12 @@ import App from './App.vue'
 import router from './router'
 import PrimeVue from 'primevue/config'
 import Aura from "@primevue/themes/aura";
-import Button from "primevue/button";
-import Tree from 'primevue/tree';
+import ToastService from 'primevue/toastservice';
 
 const app = createApp(App);
 
 app.use(router);
+app.use(ToastService);
 
 app.use(PrimeVue, {
     theme: {
@@ -20,9 +20,6 @@ app.use(PrimeVue, {
         }
     },
 });
-
-app.component("Button", Button);
-app.component("Tree", Tree);
 
 app.mount('#app');
 

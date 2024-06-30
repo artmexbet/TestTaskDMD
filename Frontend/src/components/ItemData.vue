@@ -1,7 +1,15 @@
 <script setup>
 import {ref, watchEffect} from "vue";
 import ProgressSpinner from 'primevue/progressspinner';
+import CheckData from "@/components/CheckData.vue";
+import EditTask from "@/components/EditTask.vue";
+import Button from "primevue/button";
+import axios from "axios";
+import Toast from "primevue/toast";
 
+import {useToast} from 'primevue/usetoast';
+
+const toast = useToast();
 
 const props = defineProps({
   item: Object
@@ -13,30 +21,51 @@ const task = ref(null);
 
 const is_loading = ref(false);
 
-const loadItem = async () => {
-  const response = await fetch(`http://localhost:8000/api/tasks/${item.value['key']}`);
+const loadTasks = () => {
   is_loading.value = true;
-  const data = await response.json();
-  is_loading.value = false;
-  return data;
-};
-
+  axios.get(`http://localhost:8000/api/tasks/${item.value['key']}`).then(
+      (response) => {
+        task.value = response.data;
+        is_loading.value = false;
+      }
+  );
+}
 
 watchEffect(() => {
   item.value = props.item;
   if (props.item) {
-    loadItem().then(data => {
-      task.value = data;
-      console.log('task', task.value);
-    });
+    loadTasks();
   }
 });
+
+const isEditing = ref(false);
+
+const deleteTask = () => {
+  axios.delete(`http://localhost:8000/api/tasks/${task.value.id}/`).then(
+      () => {
+        task.value = null;
+        toast.add({severity: 'success', summary: 'Удаление задания', detail: 'Задание успешно удалено', life: 3000});
+        loadTasks();
+      }
+  );
+};
+
 </script>
 
 <template>
+  <Toast/>
   <div v-if="task">
-    <h2>{{ task.name }}</h2>
-    <p>{{ task.description }}</p>
+    <div v-if="isEditing">
+      <EditTask :task="task"/>
+      <Button type="button" label="Отмена" @click="isEditing = false"/>
+    </div>
+    <div v-else>
+      <CheckData :task="task"/>
+      <div>
+        <Button type="button" label="Редактировать" @click="isEditing = true" severity="info" class="button-spacing"/>
+        <Button type="button" label="Удалить" @click="deleteTask" severity="danger" class="button-spacing"/>
+      </div>
+    </div>
   </div>
   <div v-else-if="is_loading">
     <ProgressSpinner class="loading"/>
@@ -50,5 +79,9 @@ watchEffect(() => {
 .loading {
   margin: 0 auto;
   display: block;
+}
+
+.button-spacing{
+  margin-right: 10px;
 }
 </style>

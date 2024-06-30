@@ -1,13 +1,9 @@
 <script setup>
-
+import Navigation from "@/components/Navigation.vue";
 </script>
 
 <template>
-  <div>
-    <router-link to="/">Items List</router-link>
-    <router-link :to="`/create-item`">Add item</router-link>
-  </div>
-  <br>
+  <Navigation/><br>
   <router-view/>
 </template>
 

@@ -2,6 +2,8 @@
 import {ref, reactive, onMounted} from "vue";
 import axios from 'axios';
 import ProgressSpinner from 'primevue/progressspinner';
+import Button from "primevue/button";
+import Tree from 'primevue/tree';
 
 // Создаем объект expandedKeys
 const expandedKeys = reactive({});
@@ -51,8 +53,8 @@ onMounted(fetchItems);
 
 <template>
   <div class="flex flex-wrap gap-2 mb-6">
-    <Button type="button" icon="pi pi-plus" label="Развернуть все" @click="expandAll" class="button-expand"/>
-    <Button type="button" icon="pi pi-minus" label="Свернуть все" @click="collapseAll"/>
+    <Button type="button" label="Развернуть все" @click="expandAll" class="button-expand"/>
+    <Button type="button" label="Свернуть все" @click="collapseAll"/>
   </div>
 
   <div v-if="nodes">
