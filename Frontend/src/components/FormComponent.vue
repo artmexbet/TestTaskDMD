@@ -10,6 +10,7 @@ import Toast from "primevue/toast";
 
 // Создаём уведомление об успешном сохранении
 import {useToast} from 'primevue/usetoast';
+import {serverUrl} from "@/config.js";
 
 const toast = useToast();
 
@@ -49,7 +50,7 @@ const submitForm = () => {
     }
   }
   console.log(selectedNode.value);
-  if (selectedNode.value === undefined) {
+  if (selectedNode.value == null) {
     form.value['parent_task'] = null;
   } else {
     form.value['parent_task'] = selectedNode.value['key'];
@@ -57,9 +58,9 @@ const submitForm = () => {
 
   form.value['actual_effort'] = form.value['planned_effort'];
 
-  axios.post('http://localhost:8000/api/tasks/', form.value)
+  axios.post(`${serverUrl}/tasks/`, form.value)
       .then(() => {
-        error.value = '';
+        showSuccess();
         form.value = {
           name: '',
           description: '',
@@ -86,7 +87,7 @@ const onNodeSelected = (node) => {
 // Получаем список задач для выбора родительской задачи
 const fetchTasks = async () => {
   try {
-    const response = await axios.get('http://localhost:8000/api/tasks/');
+    const response = await axios.get(`${serverUrl}/tasks/`);
     nodes.value = response.data;
   } catch (e) {
     console.error(e);
@@ -122,7 +123,7 @@ onMounted(fetchTasks);
     <div>
       <label for="parent_task">Задание-родитель</label>
       <p>{{task}}</p>
-      <TreeSelect @node-select="onNodeSelected" :options="nodes" :selection-mode="single" :style="{width: '100%'}"/>
+      <TreeSelect @node-select="onNodeSelected" :options="nodes" selection-mode="single" :style="{width: '100%'}"/>
     </div>
     <Button type="submit" label="Подтвердить"/>
   </form>
@@ -150,10 +151,5 @@ input, textarea, .p-dropdown, .p-listbox {
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid #ccc;
-}
-
-.error {
-  color: red;
-  margin-bottom: 1rem;
 }
 </style>

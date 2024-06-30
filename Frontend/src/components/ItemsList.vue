@@ -4,6 +4,7 @@ import axios from 'axios';
 import ProgressSpinner from 'primevue/progressspinner';
 import Button from "primevue/button";
 import Tree from 'primevue/tree';
+import {serverUrl} from "@/config.js";
 
 // Создаем объект expandedKeys
 const expandedKeys = reactive({});
@@ -42,7 +43,7 @@ const nodes = ref(null);
 
 const fetchItems = async () => {
   try {
-    const response = await axios.get('http://localhost:8000/api/tasks/');
+    const response = await axios.get(`${serverUrl}/tasks/`);
     nodes.value = response.data;
   } catch (e) {
     console.error(e);

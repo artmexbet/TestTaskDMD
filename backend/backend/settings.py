@@ -83,8 +83,8 @@ DATABASES = {
         'NAME': 'ttdmd',
         'USER': 'postgres',
         'PASSWORD': 'test',
-        'HOST': 'localhost',
-        'PORT': '5431',
+        'HOST': 'database',
+        'PORT': '5432',
     }
 }
 

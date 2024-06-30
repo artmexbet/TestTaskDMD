@@ -9,6 +9,7 @@ import Toast from "primevue/toast";
 
 // Создаём уведомление об успешном сохранении
 import {useToast} from 'primevue/usetoast';
+import {serverUrl} from "@/config.js";
 
 const toast = useToast();
 
@@ -51,7 +52,7 @@ const submitForm = () => {
     }
   }
 
-  axios.put(`http://localhost:8000/api/tasks/${task.value.id}/`, form.value).then(
+  axios.put(`${serverUrl}/tasks/${task.value.id}/`, form.value).then(
       () => {
         showSuccess();
       }).catch((e) => {

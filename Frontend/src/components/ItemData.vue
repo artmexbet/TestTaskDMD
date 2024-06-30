@@ -8,6 +8,7 @@ import axios from "axios";
 import Toast from "primevue/toast";
 
 import {useToast} from 'primevue/usetoast';
+import { serverUrl } from '../config';
 
 const toast = useToast();
 
@@ -23,7 +24,7 @@ const is_loading = ref(false);
 
 const loadTasks = () => {
   is_loading.value = true;
-  axios.get(`http://localhost:8000/api/tasks/${item.value['key']}`).then(
+  axios.get(`${serverUrl}/tasks/${item.value['key']}`).then(
       (response) => {
         task.value = response.data;
         is_loading.value = false;
@@ -41,7 +42,7 @@ watchEffect(() => {
 const isEditing = ref(false);
 
 const deleteTask = () => {
-  axios.delete(`http://localhost:8000/api/tasks/${task.value.id}/`).then(
+  axios.delete(`${serverUrl}/tasks/${task.value.id}/`).then(
       () => {
         task.value = null;
         toast.add({severity: 'success', summary: 'Удаление задания', detail: 'Задание успешно удалено', life: 3000});
